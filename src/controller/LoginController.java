@@ -1,14 +1,7 @@
-package application;
+package controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
 
-import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -18,7 +11,22 @@ public class LoginController {
 	@FXML Button button_login;
 	@FXML Button button_newAccount;
 	@FXML TextField textfield_username;
-	@FXML TextField textfield_password;
+	
+	private String entered_username;
+	
+	
+	
+	@FXML
+	private void handleButtonAction(ActionEvent e) {
+		Button b = (Button)e.getSource();
+		if (b == button_login) {
+			entered_username = textfield_username.getText();
+			// add code
+		} else if (b == button_newAccount) {
+			// add code
+		}
+	}
+	
 	
 	
 	public void start(Stage mainStage) {

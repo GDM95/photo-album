@@ -7,6 +7,7 @@ package application;
 
 import java.io.IOException;
 
+import controller.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,7 +21,7 @@ public class Photos extends Application {
 		
 		FXMLLoader loader = new FXMLLoader();   
 		loader.setLocation(
-				getClass().getResource("login.fxml"));
+				getClass().getResource("../view/login.fxml"));
 		
 		
 		AnchorPane root = (AnchorPane)loader.load();
