@@ -1,6 +1,5 @@
 package controller;
 
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,14 +18,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
 
-/**
- * 
- * @author Greg Melillo, Eric Kim
- * Handles the login screen
- */
-public class LoginController {
-	@FXML Button button_login;
-	@FXML Button button_newUser;
+public class NewUserController {
+	
+	@FXML Button button_register;
+	@FXML Button button_back;
 	@FXML TextField textfield_username;
 	
 	
@@ -35,11 +30,10 @@ public class LoginController {
 	
 	
 	@FXML
-    public void initialize() {	
+    public void initialize() {
 		// populate user list
 		deserializeUsers();
     }
-	
 	
 	@FXML
 	/**
@@ -48,30 +42,38 @@ public class LoginController {
 	private void handleButtonAction(ActionEvent e) throws IOException {
 		Button b = (Button)e.getSource();
 		
-		// Login button pressed
-		if (b == button_login) {
+		// Register button pressed
+		if (b == button_register) {
 			entered_username = textfield_username.getText();
-			User user = searchUserList(entered_username);
-			if(user != null) { // user with that name found
+			// the entered username is available
+			if(searchUserList(entered_username) == null) {
 				
-				// change to Album View scene
-				Stage stage = (Stage) button_login.getScene().getWindow();
+				// Serialize the User data and proceed to the album view screen
+				users_list.add(new User(entered_username));
+				System.out.println(Arrays.toString(users_list.toArray()));
+	
+				serializeUsers();
+				Stage stage = (Stage) button_back.getScene().getWindow();
 	            Parent root = FXMLLoader.load(getClass().getResource("../view/album_view.fxml"));
+
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-			}else {
-				System.out.println("user not found");
-				// display some error text on login screen
+				
+				
+			}else {	
+				// found user with that name already
+				System.out.println("username: " + entered_username + ", is already taken");
+				// display some error message on screen	
 			}
-		// New Account button pressed
-		} else if (b == button_newUser) {
-            Parent root = FXMLLoader.load(getClass().getResource("../view/new_user.fxml"));
+			
+		// Back button pressed
+		} else if (b == button_back) {
+			
+			Stage stage = (Stage) button_back.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
+
 			Scene scene = new Scene(root);
-			Stage stage = (Stage) button_newUser.getScene().getWindow();
-			stage.hide();
-			
-			
 			stage.setScene(scene);
 			stage.show();
 		}
@@ -92,7 +94,6 @@ public class LoginController {
 		 return null; 
 	}
 
-
 	
 	/**
 	 * Grabs the serialized user data from file
@@ -112,6 +113,7 @@ public class LoginController {
 		}
 	}
 	
+	
 	/**
 	 * Writes user data to file
 	 */
@@ -123,10 +125,10 @@ public class LoginController {
 			out.close();
 			fileOut.close();
 			System.out.println("Serializing Users...");
-		}catch(IOException e) {
-			
-		}	
+		}catch(IOException e) {	}	
 	}
+
+	
 	
 	
 	public void start(Stage mainStage) {
