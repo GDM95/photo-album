@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**The User class that keeps a list of albums.
+ * @author Eric S Kim
+ * @author Greg Melillo
+ *
+ */
 public class User implements Serializable {
 	
 	/**

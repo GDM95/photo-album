@@ -67,9 +67,9 @@ public class Tag implements Serializable {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(Object tag) {
-		if(tag == null || !(tag instanceof Tag)) return false;
-		Tag t = (Tag) tag;
-		return t.getType().equals(type) && t.getType().equals(name);
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof Tag)) return false;
+		Tag tag = (Tag) obj;
+		return tag.getType().equals(type) && tag.getType().equals(name);
 	}
 }

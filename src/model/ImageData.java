@@ -10,8 +10,9 @@ import java.io.Serializable;
 
 
 
-/**The PixelData class parses an Image object into a byte array
- * @author User
+/**The ImageData class parses an Image object into an int array
+ * @author Eric S Kim
+ * @author Greg Melillo
  *
  */
 public class ImageData implements Serializable {
@@ -76,15 +77,18 @@ public class ImageData implements Serializable {
 		return pixels;
 	}
 	
-	/**Checks whether two images are equal based on their ImageData
-	 * @param pd	the ImageData being compared
-	 * @return True if they are equal. False otherwise.
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public boolean equals(ImageData pd) {
-		if(width != pd.getWidth()) return false;
-		if(height != pd.getHeight()) return false;
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof ImageData)) return false;
+		ImageData id = (ImageData) obj;
+		if(width != id.getWidth()) return false;
+		if(height != id.getHeight()) return false;
+		int[] idpix = id.getPixels();
 		for(int i = 0; i < width * height; i++) {
-			if(pixels[i] != pd.getPixels()[i]) return false;
+			if(pixels[i] != idpix[i]) return false;
 		}
 		return true;
 	}

@@ -7,6 +7,11 @@ import java.util.List;
 
 import javafx.scene.image.Image;
 
+/**The Pic class that keeps ImageData for serialization
+ * @author Eric S Kim
+ * @author Greg Melillo
+ *
+ */
 public class Pic implements Serializable {
 	
 	/**

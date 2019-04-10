@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**The Album class that keeps a list of images.
+ * @author Eric S Kim
+ * @author Greg Melillo
+ *
+ */
 public class Album implements Serializable {
 	
 	/**
