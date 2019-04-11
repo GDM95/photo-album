@@ -50,6 +50,10 @@ public class Album implements Serializable {
 		}
 	}
 	
+	public List<Pic> getImageList() {
+		return this.images;
+	}
+	
 	/**Sets the album title
 	 * @param title		the desired album title
 	 */

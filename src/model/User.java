@@ -33,6 +33,10 @@ public class User implements Serializable {
 		this.albums = new ArrayList<Album>();
 	}
 	
+	public List<Album> getAlbumList(){
+		return this.albums;
+	}
+	
 	/**Gets the username field
 	 * @return the User's username
 	 */
@@ -59,7 +63,7 @@ public class User implements Serializable {
 	 * @param title	the desired album title
 	 * @param boolean value confirming whether the album was successfully added
 	 */
-	public boolean addAlbum(String title) {
+	public boolean addNewAlbum(String title) {
 		if(albumTitleExists(title)) return false;
 		this.albums.add(new Album(title));
 		return true;
@@ -70,12 +74,9 @@ public class User implements Serializable {
 	 * @return boolean value confirming whether the album was successfully removed
 	 */
 	public boolean removeAlbum(Album album) {
-		try {
-			this.albums.remove(album);
-			return true;
-		} catch(NullPointerException e) {
-			return false;
-		}
+		if(!albumTitleExists(album.getAlbumTitle())) return false;
+		this.albums.remove(album);
+		return true;
 	}
 	
 	/**Renames an Album with a new String title at the given index
@@ -104,7 +105,7 @@ public class User implements Serializable {
 			}
 			return true;
 		} catch(NullPointerException e){
-			throw e;
+			return false;
 		}
 	}
 }

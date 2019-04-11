@@ -67,6 +67,13 @@ public class Pic implements Serializable {
 		return caption;
 	}
 	
+	/**Gets the Pic's tag list
+	 * @return the tag list
+	 */
+	public List<Tag> getTagList() {
+		return this.tags;
+	}
+	
 	/**Sets the Pic's caption with the input String
 	 * @param caption	the input string
 	 */
