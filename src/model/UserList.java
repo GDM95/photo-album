@@ -21,7 +21,7 @@ public class UserList implements Serializable {
 	 */
 	private static final long serialVersionUID = 85341157L;
 	private static final String directory = "data";
-	private static final String file = "users.data";
+	private static final String file = "users";
 	/**
 	 * The user list
 	 */
@@ -29,6 +29,7 @@ public class UserList implements Serializable {
 	
 	public UserList() {
 		this.users = new ArrayList<User>();
+		deserializeUsers();
 	}
 	
 	public List<User> getUserList() {
@@ -94,7 +95,6 @@ public class UserList implements Serializable {
 		}catch(IOException | ClassNotFoundException e) {
 			
 		}finally {
-			System.out.println("Deserializing Users...");
 			System.out.println(Arrays.toString(this.users.toArray()));
 		}
 	}
@@ -109,7 +109,6 @@ public class UserList implements Serializable {
 			out.writeObject(this.users);
 			out.close();
 			fileOut.close();
-			System.out.println("Serializing Users...");
 		}catch(IOException e) {
 			
 		}	

@@ -17,7 +17,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
+import model.UserList;
 
+/**
+ * 
+ * @author Greg Melillo, Eric Kim
+ *
+ */
 public class NewUserController {
 	
 	@FXML Button button_register;
@@ -25,14 +31,13 @@ public class NewUserController {
 	@FXML TextField textfield_username;
 	
 	
-	private ArrayList<User> users_list = new ArrayList();
+	private UserList user_list = new UserList();
 	private String entered_username;
 	
 	
 	@FXML
     public void initialize() {
-		// populate user list
-		deserializeUsers();
+
     }
 	
 	@FXML
@@ -46,26 +51,18 @@ public class NewUserController {
 		if (b == button_register) {
 			entered_username = textfield_username.getText();
 			// the entered username is available
-			if(searchUserList(entered_username) == null) {
+			if(user_list.getUser(entered_username) == null) {
 				
 				// Serialize the User data and proceed to the album view screen
-				users_list.add(new User(entered_username));
-				System.out.println(Arrays.toString(users_list.toArray()));
+				if(!user_list.addNewUser(entered_username)) System.out.println("invalid username");
 	
-				serializeUsers();
+				user_list.serializeUsers();
 				Stage stage = (Stage) button_back.getScene().getWindow();
 	            Parent root = FXMLLoader.load(getClass().getResource("../view/album_view.fxml"));
 
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
-				
-				
-			}else {	
-				// found user with that name already
-				System.out.println("username: " + entered_username + ", is already taken");
-				// display some error message on screen	
-			}
 			
 		// Back button pressed
 		} else if (b == button_back) {
@@ -77,58 +74,8 @@ public class NewUserController {
 			stage.setScene(scene);
 			stage.show();
 		}
-	}
-	
-	
-	/**
-	 * Searches the username list for the given key
-	 * @param key the username to be looked up
-	 * @return
-	 */
-	public User searchUserList(String key) { 
-		 for (User user : users_list) {
-		     if (user.getUsername().equals(key)) {
-		        return user;
-		     }
-		  }
-		 return null; 
-	}
-
-	
-	/**
-	 * Grabs the serialized user data from file
-	 */
-	private void deserializeUsers() {
-		try {
-			FileInputStream fileIn = new FileInputStream("data/users");
-			ObjectInputStream in = new ObjectInputStream(fileIn);
-			users_list = (ArrayList<User>) in.readObject();
-			in.close();
-			fileIn.close();
-		}catch(IOException | ClassNotFoundException e) {
-			
-		}finally {
-			System.out.println("Deserializing Users...");
-			System.out.println(Arrays.toString(users_list.toArray()));
 		}
 	}
-	
-	
-	/**
-	 * Writes user data to file
-	 */
-	private void serializeUsers() {
-		try {
-			FileOutputStream fileOut = new FileOutputStream("data/users");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(users_list);
-			out.close();
-			fileOut.close();
-			System.out.println("Serializing Users...");
-		}catch(IOException e) {	}	
-	}
-
-	
 	
 	
 	public void start(Stage mainStage) {

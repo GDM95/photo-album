@@ -2,6 +2,7 @@ package controller;
 
 
 import java.io.FileInputStream;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
+import model.UserList;
 
 /**
  * 
@@ -30,14 +32,14 @@ public class LoginController {
 	@FXML TextField textfield_username;
 	
 	
-	private ArrayList<User> users_list = new ArrayList();
+	private UserList users_list;
 	private String entered_username;
 	
 	
 	@FXML
     public void initialize() {	
 		// populate user list
-		deserializeUsers();
+		users_list = new UserList();
     }
 	
 	
@@ -51,81 +53,24 @@ public class LoginController {
 		// Login button pressed
 		if (b == button_login) {
 			entered_username = textfield_username.getText();
-			User user = searchUserList(entered_username);
+			User user = users_list.getUser(entered_username);
 			if(user != null) { // user with that name found
 				
 				// change to Album View scene
 				Stage stage = (Stage) button_login.getScene().getWindow();
-	            Parent root = FXMLLoader.load(getClass().getResource("../view/album_view.fxml"));
+				Parent root;
+				if(entered_username.equals("admin")) {
+		            root = FXMLLoader.load(getClass().getResource("../view/admin.fxml"));
+				}else{
+					root = FXMLLoader.load(getClass().getResource("../view/album_view.fxml"));
+				}
 				Scene scene = new Scene(root);
 				stage.setScene(scene);
 				stage.show();
 			}else {
-				System.out.println("user not found");
 				// display some error text on login screen
 			}
-		// New Account button pressed
-		} else if (b == button_newUser) {
-            Parent root = FXMLLoader.load(getClass().getResource("../view/new_user.fxml"));
-			Scene scene = new Scene(root);
-			Stage stage = (Stage) button_newUser.getScene().getWindow();
-			stage.hide();
-			
-			
-			stage.setScene(scene);
-			stage.show();
 		}
-	}
-	
-	
-	/**
-	 * Searches the username list for the given key
-	 * @param key the username to be looked up
-	 * @return
-	 */
-	public User searchUserList(String key) { 
-		 for (User user : users_list) {
-		     if (user.getUsername().equals(key)) {
-		        return user;
-		     }
-		  }
-		 return null; 
-	}
-
-
-	
-	/**
-	 * Grabs the serialized user data from file
-	 */
-	private void deserializeUsers() {
-		try {
-			FileInputStream fileIn = new FileInputStream("data/users");
-			ObjectInputStream in = new ObjectInputStream(fileIn);
-			users_list = (ArrayList<User>) in.readObject();
-			in.close();
-			fileIn.close();
-		}catch(IOException | ClassNotFoundException e) {
-			
-		}finally {
-			System.out.println("Deserializing Users...");
-			System.out.println(Arrays.toString(users_list.toArray()));
-		}
-	}
-	
-	/**
-	 * Writes user data to file
-	 */
-	private void serializeUsers() {
-		try {
-			FileOutputStream fileOut = new FileOutputStream("data/users");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(users_list);
-			out.close();
-			fileOut.close();
-			System.out.println("Serializing Users...");
-		}catch(IOException e) {
-			
-		}	
 	}
 	
 	
