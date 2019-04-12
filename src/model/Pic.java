@@ -135,13 +135,10 @@ public class Pic implements Serializable {
 	 * @return True if the tag exists. False otherwise.
 	 */
 	public boolean tagExists(String type, String name) {
-		try {
-			for(Tag t : tags) {
-				if(t.getType().equalsIgnoreCase(type) && t.getName().equalsIgnoreCase(name)) return false;
-			}
-			return true;
-		} catch(NullPointerException e) {
-			return false;
+		if(this.tags == null || this.tags.isEmpty()) return false;
+		for(Tag tag : this.tags) {
+			if(tag.getType().equalsIgnoreCase(type) && tag.getName().equalsIgnoreCase(name)) return true;
 		}
+		return false;
 	}
 }
