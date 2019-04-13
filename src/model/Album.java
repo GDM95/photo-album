@@ -37,6 +37,7 @@ public class Album implements Serializable {
 	 * @return the album title
 	 */
 	public String getAlbumTitle() {
+		if(this.title == null) return "";
 		return this.title;
 	}
 	

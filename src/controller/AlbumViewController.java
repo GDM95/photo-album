@@ -51,23 +51,18 @@ public class AlbumViewController {
                 }
             }
         });
-		// select the first item
-        albumsView.getSelectionModel().select(0);
+		
+		albumName.setEditable(false);
+		numPhotos.setEditable(false);
+		dateRange.setEditable(false);
 		
 		albumsView.getSelectionModel().selectedItemProperty().addListener( (obs, oldVal, newVal) -> showAlbumDetails() );
-		
-		
 	}
 	
 	private void showAlbumDetails() {
-		Album temp = albumsView.getSelectionModel().getSelectedItem();
-		Album album = UserList.getCurrentUser().getAlbum(temp.getAlbumTitle());
-		if(album == null) {
-			albumName.clear();
-			numPhotos.clear();
-			dateRange.clear();
-			return;
-		}
+		Album album = albumsView.getSelectionModel().getSelectedItem();
+		
+		if(album == null) return;
 		albumName.setText(album.getAlbumTitle());
 		numPhotos.setText(album.getAlbumSize() +"");
 		dateRange.setText(album.getDateRange());
