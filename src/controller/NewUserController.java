@@ -1,11 +1,6 @@
 package controller;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.event.ActionEvent;
@@ -16,11 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.User;
-import model.UserList;
+import model.*;
 
 /**
- * 
+ * Controller for the 'add new user' screen
  * @author Greg Melillo, Eric Kim
  *
  */
@@ -31,15 +25,14 @@ public class NewUserController {
 	@FXML TextField textfield_username;
 	
 	
-	private UserList user_list = new UserList();
+	
 	private String entered_username;
 	
-	
 	@FXML
-    public void initialize() {
+	public void initialize() {
+		UserList.deserializeUsers();
+	}
 
-    }
-	
 	@FXML
 	/**
 	 * Handles clicking of buttons on login screen
@@ -51,17 +44,22 @@ public class NewUserController {
 		if (b == button_register) {
 			entered_username = textfield_username.getText();
 			// the entered username is available
-			if(user_list.getUser(entered_username) == null) {
-				
-				// Serialize the User data and proceed to the album view screen
-				if(!user_list.addNewUser(entered_username)) System.out.println("invalid username");
-	
-				user_list.serializeUsers();
-				Stage stage = (Stage) button_back.getScene().getWindow();
-	            Parent root = FXMLLoader.load(getClass().getResource("../view/album_view.fxml"));
 
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
+			if(UserList.getUser(entered_username) == null) {
+				// Serialize the User data and proceed to the album view screen
+				if(UserList.addNewUser(entered_username)) {
+					System.out.println("added user");
+				}
+				System.out.println(Arrays.toString(UserList.getUserList().toArray()));
+				//start passing user and user list data to AlbumViewController
+	            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/album_view.fxml"));
+	            UserList.setCurrentUser(UserList.getUser(entered_username));
+	            UserList.serializeUsers();
+	            //end data passing
+
+				Stage stage = (Stage) button_back.getScene().getWindow();
+	            
+				stage.setScene(new Scene(loader.load()));
 				stage.show();
 			
 		// Back button pressed

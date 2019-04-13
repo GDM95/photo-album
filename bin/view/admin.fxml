@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
-      <ListView layoutX="113.0" layoutY="-1.0" prefHeight="400.0" prefWidth="487.0" />
+      <ListView fx:id="listView" layoutX="113.0" layoutY="-1.0" prefHeight="400.0" prefWidth="487.0" />
       <Pane layoutY="-1.0" prefHeight="400.0" prefWidth="114.0">
          <children>
             <Button fx:id="button_addUser" layoutX="19.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Add User" />

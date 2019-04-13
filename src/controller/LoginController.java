@@ -1,25 +1,16 @@
 package controller;
 
-
-import java.io.FileInputStream;
-
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.User;
-import model.UserList;
+
+import model.*;
 
 /**
  * 
@@ -32,16 +23,11 @@ public class LoginController {
 	@FXML TextField textfield_username;
 	
 	
-	private UserList users_list;
 	private String entered_username;
 	
-	
-	@FXML
-    public void initialize() {	
-		// populate user list
-		users_list = new UserList();
-    }
-	
+	public void initialize() {
+		UserList.deserializeUsers();
+	}
 	
 	@FXML
 	/**
@@ -53,19 +39,22 @@ public class LoginController {
 		// Login button pressed
 		if (b == button_login) {
 			entered_username = textfield_username.getText();
-			User user = users_list.getUser(entered_username);
+
+			User user = UserList.getUser(entered_username);
 			if(user != null) { // user with that name found
 				
 				// change to Album View scene
-				Stage stage = (Stage) button_login.getScene().getWindow();
-				Parent root;
-				if(entered_username.equals("admin")) {
-		            root = FXMLLoader.load(getClass().getResource("../view/admin.fxml"));
-				}else{
-					root = FXMLLoader.load(getClass().getResource("../view/album_view.fxml"));
-				}
-				Scene scene = new Scene(root);
-				stage.setScene(scene);
+				
+	            //start passing user and user list data to AlbumViewController
+				String path = user.getUsername().equals("admin") ? "../view/admin.fxml" : "../view/album_view.fxml";
+				
+	            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
+	            Stage stage = (Stage) button_login.getScene().getWindow();
+	            UserList.setCurrentUser(user);
+	            UserList.serializeUsers();
+	            //end data passing
+
+				stage.setScene(new Scene(loader.load()));
 				stage.show();
 			}else {
 				// display some error text on login screen

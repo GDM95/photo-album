@@ -60,12 +60,12 @@ public class User implements Serializable {
 	}
 	
 	/**Adds a new album to the User's album list. Does not add albums with duplicate titles
-	 * @param title	the desired album title
+	 * @param album		the album to be added
 	 * @param boolean value confirming whether the album was successfully added
 	 */
-	public boolean addNewAlbum(String title) {
-		if(albumTitleExists(title)) return false;
-		this.albums.add(new Album(title));
+	public boolean addNewAlbum(Album album) {
+		if(albumTitleExists(album.getAlbumTitle())) return false;
+		this.albums.add(album);
 		return true;
 	}
 	
@@ -99,13 +99,10 @@ public class User implements Serializable {
 	 * @return boolean value determining whether an album by the given title already exists
 	 */
 	public boolean albumTitleExists(String title) {
-		try {
-			for(Album album : this.albums) {
-				if(album.getAlbumTitle().equalsIgnoreCase(title)) return false;
-			}
-			return true;
-		} catch(NullPointerException e){
-			return false;
+		if(this.albums == null || this.albums.isEmpty()) return false;
+		for(Album album : this.albums) {
+			if(album.getAlbumTitle().equalsIgnoreCase(title)) return true;
 		}
+		return false;
 	}
 }

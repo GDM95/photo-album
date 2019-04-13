@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.UserList;
 
 public class Photos extends Application {
 	@Override
@@ -38,6 +39,16 @@ public class Photos extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	
+	/**
+	 * Saves the user data in the event that the main window is closed
+	 */
+	@Override
+	public void stop(){
+	    System.out.println("Stage is closing");
+	    UserList.serializeUsers();
 	}
 
 }

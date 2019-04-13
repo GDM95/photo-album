@@ -15,6 +15,5 @@
          </font>
       </Text>
       <Button fx:id="button_login" layoutX="274.0" layoutY="291.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Login" />
-      <Button fx:id="button_newUser" layoutX="228.0" layoutY="318.0" mnemonicParsing="false" onAction="#handleButtonAction" prefWidth="145.0" text="Create New Account" />
    </children>
 </AnchorPane>
