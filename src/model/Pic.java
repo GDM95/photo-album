@@ -43,6 +43,7 @@ public class Pic implements Serializable {
 		tags = new ArrayList<Tag>();
 		date = Calendar.getInstance();
 		date.set(Calendar.MILLISECOND,0);
+		this.image = new ImageData();
 		this.image.setPixelsFromImage(image);
 	}
 	

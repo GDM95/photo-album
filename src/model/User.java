@@ -40,7 +40,7 @@ public class User implements Serializable {
 	public Album getAlbum(String title) {
 		try {
 			for (Album a : this.albums) {
-			     if (a.getAlbumTitle().equalsIgnoreCase(title)) {
+			     if (a.getAlbumTitle().equals(title)) {
 			        return a;
 			     }
 			  }
@@ -114,7 +114,7 @@ public class User implements Serializable {
 	public boolean albumTitleExists(String title) {
 		if(this.albums == null || this.albums.isEmpty()) return false;
 		for(Album album : this.albums) {
-			if(album.getAlbumTitle().equalsIgnoreCase(title)) return true;
+			if(album.getAlbumTitle().equals(title)) return true;
 		}
 		return false;
 	}
