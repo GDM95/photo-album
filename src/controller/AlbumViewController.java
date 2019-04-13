@@ -1,11 +1,16 @@
 package controller;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -29,11 +34,13 @@ public class AlbumViewController {
 	}
 	
 	public void start(Stage primaryStage) {
-		List<Album> albums = UserList.getCurrentUser().getAlbumList();
-		obsList = FXCollections.observableArrayList(albums);
+		obsList = FXCollections.observableArrayList(UserList.getCurrentUser().getAlbumList());
 		albumsView.setItems(obsList);
 		
 		albumsView.getSelectionModel().selectedItemProperty().addListener( (obs, oldVal, newVal) -> showAlbum() );
+		
+		// select the first item
+        albumsView.getSelectionModel().select(0);
 	}
 	
 	private void showAlbum() {
@@ -62,12 +69,13 @@ public class AlbumViewController {
 
 		Optional<String> result = dialog.showAndWait();
 		if(result.isPresent()) {
-			System.out.println(UserList.getCurrentUser());
-			Album album = new Album(result.get());
-			UserList.getCurrentUser().addNewAlbum(album);
-			obsList.add(album);
-			
-			UserList.serializeUsers();
+			String s = result.get();
+			UserList.getCurrentUser().addNewAlbum(new Album(s));
+			try {
+				obsList.add(UserList.getCurrentUser().getAlbum(s));
+			} catch(NullPointerException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -92,8 +100,21 @@ public class AlbumViewController {
 	}
 	
 	@FXML
-	private void logout() {
-		
+	private void logout(ActionEvent e) {
+		UserList.serializeUsers();
+
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
+			Scene scene = new Scene(root);
+			Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();	
+			stage.hide();
+			
+			
+			stage.setScene(scene);
+			stage.show();
+		} catch(IOException error) {
+			error.printStackTrace();
+		}
 	}
 	
  }

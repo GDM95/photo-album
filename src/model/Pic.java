@@ -81,12 +81,18 @@ public class Pic implements Serializable {
 		this.caption = caption;
 	}
 	
+	/**Gets the Pic's Calendar object
+	 * @return the pic's calendar object
+	 */
+	public Calendar getCalendar() {
+		return this.date;
+	}
+	
 	/**returns the Pic's date
 	 * @return a string representation of the Pic's date
 	 */
 	public String getDate() {
-		//use Calendar to return a date or something
-		return null;
+		return this.date.getTime().toString();
 	}
 	
 	/**Adds a new non-duplicate tag. Returns false if a duplicate is found.

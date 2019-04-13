@@ -37,6 +37,19 @@ public class User implements Serializable {
 		return this.albums;
 	}
 	
+	public Album getAlbum(String title) {
+		try {
+			for (Album a : this.albums) {
+			     if (a.getAlbumTitle().equalsIgnoreCase(title)) {
+			        return a;
+			     }
+			  }
+			 return null; 
+		} catch(NullPointerException e){
+			return null;
+		}
+	}
+	
 	/**Gets the username field
 	 * @return the User's username
 	 */

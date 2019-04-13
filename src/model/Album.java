@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**The Album class that keeps a list of images.
@@ -52,6 +53,42 @@ public class Album implements Serializable {
 	
 	public List<Pic> getImageList() {
 		return this.images;
+	}
+	
+	/**Helper method for getDateRange. Gets the oldest Calendar in the album.
+	 * @return	the oldest Pic's Calendar
+	 */
+	public Calendar getOldestCalendar() {
+		if(this.getAlbumSize() == 0) return null;
+		
+		Pic temp = this.images.get(0);
+		for(Pic pic : this.images) {
+			if(pic.getCalendar().compareTo(temp.getCalendar()) < 0) temp = pic;
+		}
+		
+		return temp.getCalendar();
+	}
+	
+	/**Helper method for getDateRange. Gets the newest Calendar in the album.
+	 * @return	the newest Pic's Calendar
+	 */
+	public Calendar getNewestCalendar() {
+		if(this.getAlbumSize() == 0) return null;
+		
+		Pic temp = this.images.get(0);
+		for(Pic pic : this.images) {
+			if(pic.getCalendar().compareTo(temp.getCalendar()) > 0) temp = pic;
+		}
+		
+		return temp.getCalendar();
+	}
+	
+	/**Gets the date range of all pics in the album.
+	 * @return	the Album's date range
+	 */
+	public String getDateRange() {
+		if(this.getAlbumSize() == 0) return "";
+		return getOldestCalendar().getTime().toString() +" - " +getNewestCalendar().getTime().toString();
 	}
 	
 	/**Sets the album title
