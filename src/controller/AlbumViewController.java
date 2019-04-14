@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -90,6 +91,7 @@ public class AlbumViewController {
 				obsList.add(temp);
 				UserList.getCurrentUser().addNewAlbum(temp);
 				UserList.serializeUsers();
+				sortList();
 				albumsView.getSelectionModel().select(temp);
 			}
 		} catch(NullPointerException e) {
@@ -107,6 +109,11 @@ public class AlbumViewController {
 		if (alert.getResult() == ButtonType.YES) {
 			obsList.remove(temp);
 			UserList.getCurrentUser().removeAlbum(temp);
+		}
+		if(obsList.size() == 0) {
+			albumName.clear();
+			numPhotos.clear();
+			dateRange.clear();
 		}
 	}
 	
@@ -132,14 +139,19 @@ public class AlbumViewController {
 			temp.setAlbumTitle(s);
 			int index = albumsView.getSelectionModel().getSelectedIndex();
 			obsList.set(index, temp);
+			sortList();
+			albumsView.getSelectionModel().select(temp);
+			showAlbumDetails();
 		}
 	}
 	
 	@FXML
 	private void openAlbum(ActionEvent e) {
 		//start passing user and user list data to AlbumViewController
-		UserList.serializeUsers();
+		
 		Album temp = albumsView.getSelectionModel().getSelectedItem();
+		if(temp == null) return;
+		UserList.serializeUsers();
 		UserList.setCurrentAlbum(temp);
 		
 		try {
@@ -157,7 +169,7 @@ public class AlbumViewController {
 	}
 	
 	@FXML
-	private void search() {
+	private void search(ActionEvent e) {
 		//searches all available albums for photos and copies the results to a new album
 	}
 	
@@ -177,6 +189,10 @@ public class AlbumViewController {
 		} catch(IOException error) {
 			error.printStackTrace();
 		}
+	}
+	
+	private void sortList() {
+		obsList.sort(Comparator.comparing(Album::getAlbumTitle));
 	}
 
 	public void start(Stage primaryStage) {		
