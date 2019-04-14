@@ -120,7 +120,6 @@ public class AdminController {
 	 */
 	public void deleteUser() {
 		User u = listView.getSelectionModel().getSelectedItem();
-		System.out.println(u.getUsername());
 		
 		if(!u.getUsername().equals("admin") && !u.getUsername().equals("stock")){
 			Alert alert = new Alert(AlertType.CONFIRMATION, "Delete " + u.getUsername() + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
