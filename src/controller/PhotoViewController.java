@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -18,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -32,6 +34,7 @@ public class PhotoViewController {
 	
 	@FXML GridPane photogrid;
 	
+	@FXML ImageView display;
 	
 	@FXML
 	public void initialize() {
@@ -43,9 +46,10 @@ public class PhotoViewController {
 		
 		for(int i = 0; i < UserList.getCurrentAlbum().getAlbumSize(); i++) {
 			ImageView imageView = new ImageView(UserList.getCurrentAlbum().getPhoto(i).getImage());
+			imageView.setPreserveRatio(true);
 			imageView.setFitHeight(122.0);
-			imageView.setFitWidth(89.0);
-			photogrid.add(imageView, i % 2, i / 3);
+			imageView.setFitWidth(88.0);
+			photogrid.add(imageView, i % 2, i / 2);
 		}
 		
 	}
@@ -105,7 +109,7 @@ public class PhotoViewController {
 					UserList.getCurrentAlbum().addPhoto(photo);
 					UserList.serializeUsers();
 					ImageView imgView = new ImageView(photo.getImage());
-					photogrid.add(imgView, 0, 0);
+					photogrid.getChildren().add(imgView);
 					return;
 				}
 			}
