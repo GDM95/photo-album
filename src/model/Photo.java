@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
  * @author Greg Melillo
  *
  */
-public class Pic implements Serializable {
+public class Photo implements Serializable {
 	
 	/**
 	 * explicit serialVersionUID for compiler consistency
@@ -21,7 +21,7 @@ public class Pic implements Serializable {
 	/**
 	 * The actual image data
 	 */
-	private ImageData image;
+	private PhotoData image;
 	/**
 	 * The image's caption
 	 */
@@ -38,12 +38,12 @@ public class Pic implements Serializable {
 	/**Pic Constructor used to create a serializable Image object.
 	 * @param image		the Image object
 	 */
-	public Pic(Image image) {
+	public Photo(Image image) {
 		caption = "";
 		tags = new ArrayList<Tag>();
 		date = Calendar.getInstance();
 		date.set(Calendar.MILLISECOND,0);
-		this.image = new ImageData();
+		this.image = new PhotoData();
 		this.image.setPixelsFromImage(image);
 	}
 	
@@ -54,10 +54,10 @@ public class Pic implements Serializable {
 		return image.getImageFromPixels();
 	}
 	
-	/**Gets the Pic's ImageData
-	 * @return the Pic's ImageData
+	/**Gets the Pic's PhotoData
+	 * @return the Pic's PhotoData
 	 */
-	public ImageData getImageData() {
+	public PhotoData getPhotoData() {
 		return image;
 	}
 	

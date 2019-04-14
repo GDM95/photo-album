@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @author Greg Melillo
  *
  */
-public class ImageData implements Serializable {
+public class PhotoData implements Serializable {
 	
 	/**
 	 * explicit serialVersionUID for compiler consistency
@@ -33,7 +33,7 @@ public class ImageData implements Serializable {
 	/**
 	 * Default constructor
 	 */
-	public ImageData() {}
+	public PhotoData() {}
 	
 	/**Converts the int[] pixel data into an Image object
 	 * @return		an Image object from the stored pixel data
@@ -50,9 +50,10 @@ public class ImageData implements Serializable {
 	public void setPixelsFromImage(Image image) {
 		width = (int) image.getWidth();
 		height = (int) image.getHeight();
+		pixels = new int[width * height];
 		PixelReader reader = image.getPixelReader();
 		for(int i = 0; i < width * height; i++) {
-			pixels[i] = reader.getArgb(i & width, i / width);
+			pixels[i] = reader.getArgb(i % width, i / width);
 		}
 	}
 	
@@ -82,8 +83,8 @@ public class ImageData implements Serializable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == null || !(obj instanceof ImageData)) return false;
-		ImageData id = (ImageData) obj;
+		if(obj == null || !(obj instanceof PhotoData)) return false;
+		PhotoData id = (PhotoData) obj;
 		if(width != id.getWidth()) return false;
 		if(height != id.getHeight()) return false;
 		int[] idpix = id.getPixels();
