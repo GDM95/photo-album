@@ -77,12 +77,11 @@ public class AlbumViewController {
         });
 		
 
-        albumsView.getSelectionModel().select(0);
         sortList();
 		albumName.setEditable(false);
 		numPhotos.setEditable(false);
 		dateRange.setEditable(false);
-		sortList();
+		
 		
 		albumsView.getSelectionModel().selectedItemProperty().addListener( (obs, oldVal, newVal) -> showAlbumDetails() );
 	}
