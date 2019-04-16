@@ -108,8 +108,9 @@ public class Photo implements Serializable {
 		return true;
 	}
 	
-	/**Removes a given Tag object from the Tag list
-	 * @param tag		the tag to be removed
+	/**Removes a Tag from the list with the matching type and name
+	 * @param type		the type of the tag
+	 * @param name		the name of the tag
 	 * @return boolean value determining whether the tag was successfully removed
 	 */
 	public boolean removeTag(String type, String name) {

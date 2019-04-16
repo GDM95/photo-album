@@ -100,7 +100,7 @@ public class Album implements Serializable {
 	}
 	
 	/**Adds a photo to the Album
-	 * @param image		the image being added to the album
+	 * @param photo		the image being added to the album
 	 */
 	public boolean addPhoto(Photo photo) {
 		if(photoExists(photo)) return false;

@@ -81,7 +81,7 @@ public class User implements Serializable {
 	
 	/**Adds a new album to the User's album list. Does not add albums with duplicate titles
 	 * @param album		the album to be added
-	 * @param boolean value confirming whether the album was successfully added
+	 * @return boolean value confirming whether the album was successfully added
 	 */
 	public boolean addNewAlbum(Album album) {
 		if(albumTitleExists(album.getAlbumTitle())) return false;
