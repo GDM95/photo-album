@@ -53,9 +53,9 @@ public class AlbumViewController {
             }
         });
 		
+
         albumsView.getSelectionModel().select(0);
         sortList();
-		
 		albumName.setEditable(false);
 		numPhotos.setEditable(false);
 		dateRange.setEditable(false);
@@ -112,6 +112,7 @@ public class AlbumViewController {
 		if (alert.getResult() == ButtonType.YES) {
 			obsList.remove(temp);
 			UserList.getCurrentUser().removeAlbum(temp);
+			UserList.serializeUsers();
 		}
 		if(obsList.size() == 0) {
 			albumName.clear();

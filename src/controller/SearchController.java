@@ -54,8 +54,6 @@ public class SearchController {
 
 
 
-	
-		
 	public void initialize() {
 		// populate user list
 		UserList.deserializeUsers();
@@ -145,7 +143,9 @@ public class SearchController {
 		combo_tag2.setItems(tagOptions);
 	}
 	
-	
+	/**
+	 * sets widgets for a Tag search
+	 */
 	public void displayTagSearch() {
 		button_dateConfirm.setVisible(false);
 		datePicker_from.setVisible(false);
@@ -153,6 +153,9 @@ public class SearchController {
 		combo_numTags.setVisible(true);
 	}
 	
+	/**
+	 * sets widgets for a 1 or 2 tag search
+	 */
 	public void displayTagSearch(int i) {
 		if(i == 1) {
 			combo_tag1.setVisible(true);
@@ -174,6 +177,9 @@ public class SearchController {
 		}
 	}
 	
+	/**
+	 * sets widgets for a Date search
+	 */
 	public void displayDateSearch() {
 		combo_numTags.setVisible(false);
 		combo_tag1.setVisible(false);
@@ -188,8 +194,10 @@ public class SearchController {
 	}
 	
 
+	/**
+	 * handles clicking of the confirm button for a 1 tag search
+	 */
 	public void searchBy1Tag() {
-		System.out.println("Getting tag list");
 		for(String s: Tag.getDistinctTypesList()) {
 			System.out.println(s);
 		}
@@ -199,16 +207,22 @@ public class SearchController {
 		for(Album a : album_list) {
 			List<Photo> photo_list = a.getPhotoList();
 			for(Photo p : photo_list) {
-				System.out.println(p.getPhotoData());
+				
 			}
 		}
 	}
 	
+	/**
+	 * handles clicking of the confirm button for a 2 tag search
+	 */
 	public void searchBy2Tag() {
 		
 	}
 	
 	
+	/**
+	 * handles clicking of the confirm button for the back button, returns to album view
+	 */
 	public void handleBackButtonClick(ActionEvent e) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("../view/album_view.fxml"));
@@ -222,6 +236,9 @@ public class SearchController {
 		}
 	}
 	
+	/**
+	 * listener for the pair of tag search confirm buttons, calls their corresponding methods in turn
+	 */
 	public void handleConfirmButtonClick(ActionEvent e) {
 		Button b = (Button)e.getSource();
 

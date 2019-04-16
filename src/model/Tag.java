@@ -35,7 +35,6 @@ public class Tag implements Serializable {
 		
 		// if the entered tag type is new, add it to the unique tag type list
 		if(!distinctTypes.contains(type)) {
-			System.out.println("Added new unique type");
 			distinctTypes.add(type);
 		}
 	}
@@ -80,7 +79,7 @@ public class Tag implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Type: " +type +", Name: " +name;
+		return type +": " +name;
 	}
 	
 	/* (non-Javadoc)
