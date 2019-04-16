@@ -22,17 +22,40 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import model.*;
 
+/**Album List controller
+ * @author Eric S Kim
+ * @author Greg Melillo
+ *
+ */
 public class AlbumViewController {
 
+	/**
+	 * Album ListView
+	 */
 	@FXML
 	ListView<Album> albumsView;
 	
+	/**
+	 * Album title text field
+	 */
 	@FXML TextField albumName;
+	/**
+	 * Number of photos text field
+	 */
 	@FXML TextField numPhotos;
+	/**
+	 * Date range text field
+	 */
 	@FXML TextField dateRange;
 	
+	/**
+	 * Album ObservableList
+	 */
 	private ObservableList<Album> obsList;
 	
+	/**
+	 * Initializes the controller
+	 */
 	@FXML
 	public void initialize() {
 		UserList.deserializeUsers();
@@ -59,10 +82,14 @@ public class AlbumViewController {
 		albumName.setEditable(false);
 		numPhotos.setEditable(false);
 		dateRange.setEditable(false);
+		sortList();
 		
 		albumsView.getSelectionModel().selectedItemProperty().addListener( (obs, oldVal, newVal) -> showAlbumDetails() );
 	}
 	
+	/**
+	 * Displays album details in the text fields.
+	 */
 	private void showAlbumDetails() {
 		Album album = albumsView.getSelectionModel().getSelectedItem();
 		
@@ -72,6 +99,9 @@ public class AlbumViewController {
 		dateRange.setText(album.getDateRange());
 	}
 	
+	/**
+	 * Creates a new album via text prompt.
+	 */
 	@FXML
 	private void createAlbum() {
 		TextInputDialog dialog = new TextInputDialog();
@@ -102,6 +132,9 @@ public class AlbumViewController {
 		}
 	}
 	
+	/**
+	 * Deletes the selected album from the list.
+	 */
 	@FXML
 	private void deleteAlbum() {
 		Album temp = albumsView.getSelectionModel().getSelectedItem();
@@ -121,6 +154,9 @@ public class AlbumViewController {
 		}
 	}
 	
+	/**
+	 * Renames the selected album to a new name via text prompt.
+	 */
 	@FXML
 	private void renameAlbum() {
 		Album temp = albumsView.getSelectionModel().getSelectedItem();
@@ -149,6 +185,9 @@ public class AlbumViewController {
 		}
 	}
 	
+	/**Opens the selected album.
+	 * @param e		action event
+	 */
 	@FXML
 	private void openAlbum(ActionEvent e) {
 		//start passing user and user list data to AlbumViewController
@@ -192,7 +231,9 @@ public class AlbumViewController {
 		}
 	}
 	
-	
+	/**Logs the User out and returns to the Login screen.
+	 * @param e		action event
+	 */
 	@FXML
 	private void logout(ActionEvent e) {
 		UserList.serializeUsers();
@@ -211,10 +252,16 @@ public class AlbumViewController {
 		}
 	}
 	
+	/**
+	 * Sorts the album ListView.
+	 */
 	private void sortList() {
 		obsList.sort(Comparator.comparing(Album::getAlbumTitle));
 	}
 
+	/**Empty start method
+	 * @param primaryStage	primary stage
+	 */
 	public void start(Stage primaryStage) {		
 		
 	}

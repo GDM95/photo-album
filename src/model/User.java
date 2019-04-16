@@ -33,10 +33,17 @@ public class User implements Serializable {
 		this.albums = new ArrayList<Album>();
 	}
 	
+	/**Gets the User's album list
+	 * @return	the album list
+	 */
 	public List<Album> getAlbumList(){
 		return this.albums;
 	}
 	
+	/**Gets the album in the album list
+	 * @param title		the album title
+	 * @return	the album with the provided album title
+	 */
 	public Album getAlbum(String title) {
 		try {
 			for (Album a : this.albums) {

@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 
 import javafx.scene.image.Image;
@@ -107,17 +108,19 @@ public class Photo implements Serializable {
 		return true;
 	}
 	
-	/**Removes a tag at the given index if one exists
-	 * @param index		the index of the tag
+	/**Removes a given Tag object from the Tag list
+	 * @param tag		the tag to be removed
 	 * @return boolean value determining whether the tag was successfully removed
 	 */
-	public boolean removeTag(int index) {
-		try {
-			tags.remove(index);
-			return true;
-		} catch(NullPointerException | ArrayIndexOutOfBoundsException e) {
-			return false;
+	public boolean removeTag(String type, String name) {
+		if(!tagExists(type,name)) return false;
+		for(Tag tag : this.tags) {
+			if (tag.getType().equals(type) && tag.getName().equals(name)) {
+				this.tags.remove(tag);
+				return true;
+			}
 		}
+		return false;
 	}
 	
 	/**Edits a tag's values at a given index with the given string parameters if the tag exists.
@@ -134,6 +137,12 @@ public class Photo implements Serializable {
 		} catch(NullPointerException | ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
+	}
+	
+	public void sortTags() {
+		this.tags.sort(Comparator
+				.comparing(Tag::getType)
+				.thenComparing(Tag::getName));
 	}
 	
 	/**Helper method to check if a Pic contains a particular tag. Case insensitive.

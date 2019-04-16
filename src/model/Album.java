@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import javafx.scene.image.Image;
-
 /**The Album class that keeps a list of images.
  * @author Eric S Kim
  * @author Greg Melillo
@@ -104,43 +102,27 @@ public class Album implements Serializable {
 	/**Adds a photo to the Album
 	 * @param image		the image being added to the album
 	 */
-	public void addPhoto(Photo image) {
-		if(image == null) return;
-		this.images.add(image);
-	}
-	
-	public boolean removePhoto(int index) {
-		try {
-			this.images.remove(index);
-			return true;
-		} catch(NullPointerException | ArrayIndexOutOfBoundsException e) {
-			return false;
-		}
+	public boolean addPhoto(Photo photo) {
+		if(photoExists(photo)) return false;
+		this.images.add(photo);
+		return true;
 	}
 	
 
+	/**Removes the photo from the album
+	 * @param photo		the photo to be removed
+	 * @return	boolean value confirming whether the removal was successful
+	 */
 	public boolean removePhoto(Photo photo) {
 		if(!photoExists(photo)) return false;
 		this.images.remove(photo);
 		return true;
 	}
 	
-	public Photo getPhoto(int index) {
-		try {
-			return this.images.get(index);
-		} catch(NullPointerException | ArrayIndexOutOfBoundsException e) {
-			return null;
-		}
-	}
-	
-	public Photo getFirstPhoto() {
-		try {
-			return this.images.get(0);
-		} catch(NullPointerException e) {
-			return null;
-		}
-	}
-	
+	/**Checks whether the photo exists in the album
+	 * @param photo		the photo being checked
+	 * @return	boolean confirming whether the photo exists in the album
+	 */
 	public boolean photoExists(Photo photo) {
 		if(this.images == null || this.images.isEmpty()) return false;
 		for(Photo temp : this.images) {

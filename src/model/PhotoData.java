@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 
 
-/**The ImageData class parses an Image object into an int array
+/**The PhotoData class parses an unserializable Image object into an int array for serialization
  * @author Eric S Kim
  * @author Greg Melillo
  *
