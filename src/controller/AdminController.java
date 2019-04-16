@@ -24,17 +24,40 @@ import model.User;
 import model.UserList;
 
 
+/**Admin window contrller
+ * @author Greg Melillo
+ * @author Eric S Kim
+ *
+ */
 public class AdminController {
 	
+	/**
+	 * Add User button
+	 */
 	@FXML Button button_addUser;
+	/**
+	 * Delete User Button
+	 */
 	@FXML Button button_deleteUser;
+	/**
+	 * Logout button
+	 */
 	@FXML Button button_logout;
 	
 	
+	/**
+	 * User ListView
+	 */
 	@FXML ListView<User> listView;  
+	/**
+	 * User ObservableList
+	 */
 	private ObservableList<User> items;
 
 	
+	/**
+	 * Initializes the controller
+	 */
 	@FXML
     public void initialize() {
 		// populate user list
@@ -144,6 +167,9 @@ public class AdminController {
 	}
 	
 	
+	/**Empty start method
+	 * @param mainStage		main stage
+	 */
 	public void start(Stage mainStage) {}
 	
 }

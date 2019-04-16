@@ -17,48 +17,80 @@ import java.util.List;
  */
 public class UserList {
 	/**
-	 * explicit serialVersionUID for compiler consistency
+	 * Directory string
 	 */
 	private static final String directory = "data";
+	/**
+	 * filename string
+	 */
 	private static final String file = "users";
 	/**
 	 * The user list
 	 */
 	private static ArrayList<User> users;
 	
+	/**
+	 * The current username being tracked throughout the program's lifetime
+	 */
 	private static String current_username;
 	
+	/**
+	 * The current album being tracked throughout the program's lifetime
+	 */
 	private static String current_album;
 	
 	
+	/**Gets the current user
+	 * @return	the current user
+	 */
 	public static User getCurrentUser() {
 		User temp = UserList.getUser(current_username);
 		return temp;
 	}
 	
+	/**Set the current user
+	 * @param user	the current user
+	 */
 	public static void setCurrentUser(User user) {
 		UserList.current_username = user.getUsername();
 	}
 	
+	/**Gets the current album
+	 * @return	the current album
+	 */
 	public static Album getCurrentAlbum() {
 		Album temp = getCurrentUser().getAlbum(current_album);
 		return temp;
 	}
 	
+	/**Sets the current album
+	 * @param album	the current album
+	 */
 	public static void setCurrentAlbum(Album album) {
 		UserList.current_album = album.getAlbumTitle();
 	}
 	
+	/**Gets the User list
+	 * @return	the user list
+	 */
 	public static List<User> getUserList() {
 		return UserList.users;
 	}
 	
+	/**Adds a new User to the list
+	 * @param name	the name of the new user
+	 * @return	boolean confirming whether the addition was successful
+	 */
 	public static boolean addNewUser(String name) {
 		if(usernameExists(name)) return false;
 		UserList.users.add(new User(name));
 		return true;
 	}
 	
+	/**Removes the user from the list
+	 * @param user	the user to be removed
+	 * @return	boolean confirming whether the removal was successful
+	 */
 	public static boolean removeUser(User user) {
 		if(!usernameExists(user.getUsername())) return false;
 		try {
@@ -69,6 +101,10 @@ public class UserList {
 		}
 	}
 	
+	/**Checks whether the username exists in the User list
+	 * @param name	the name being checked
+	 * @return	boolean confirming whether the username exists in the list
+	 */
 	public static boolean usernameExists(String name) {
 		if(UserList.users == null || users.isEmpty()) return false;
 		for(User user : UserList.users) {

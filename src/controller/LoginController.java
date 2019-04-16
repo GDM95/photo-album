@@ -14,17 +14,28 @@ import model.*;
 
 /**
  * 
- * @author Greg Melillo, Eric Kim
+ * @author Greg Melillo
+ * @author Eric S Kim
  * Handles the login screen
  */
 public class LoginController {
+	/**
+	 * login button
+	 */
 	@FXML Button button_login;
-	@FXML Button button_newUser;
+	/**
+	 * Username text field
+	 */
 	@FXML TextField textfield_username;
-	
-	
+		
+	/**
+	 * String that tracks the entered username
+	 */
 	private String entered_username;
 	
+	/**
+	 * Initializes the controller
+	 */
 	public void initialize() {
 		UserList.deserializeUsers();
 	}
@@ -63,6 +74,9 @@ public class LoginController {
 	}
 	
 	
+	/**Starts the controller
+	 * @param mainStage		main stage
+	 */
 	public void start(Stage mainStage) {
 	    // execute own shutdown procedure
 	    mainStage.close();
