@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**The Album class that keeps a list of images.
@@ -22,20 +23,21 @@ public class Album implements Serializable {
 	/**
 	 * The List of images as Pic objects
 	 */
-	private List<Pic> images;
+	private List<Photo> images;
 	
 	/**Constructs an album with a specified title
 	 * @param title		the album title
 	 */
 	public Album(String title) {
 		this.title = title;
-		this.images = new ArrayList<Pic>();
+		this.images = new ArrayList<Photo>();
 	}
 	
 	/**Gets the Album title
 	 * @return the album title
 	 */
 	public String getAlbumTitle() {
+		if(this.title == null) return "";
 		return this.title;
 	}
 	
@@ -50,8 +52,44 @@ public class Album implements Serializable {
 		}
 	}
 	
-	public List<Pic> getImageList() {
+	public List<Photo> getPhotoList() {
 		return this.images;
+	}
+	
+	/**Helper method for getDateRange. Gets the oldest Calendar in the album.
+	 * @return	the oldest Pic's Calendar
+	 */
+	public Calendar getOldestCalendar() {
+		if(this.getAlbumSize() == 0) return null;
+		
+		Photo temp = this.images.get(0);
+		for(Photo pic : this.images) {
+			if(pic.getCalendar().compareTo(temp.getCalendar()) < 0) temp = pic;
+		}
+		
+		return temp.getCalendar();
+	}
+	
+	/**Helper method for getDateRange. Gets the newest Calendar in the album.
+	 * @return	the newest Pic's Calendar
+	 */
+	public Calendar getNewestCalendar() {
+		if(this.getAlbumSize() == 0) return null;
+		
+		Photo temp = this.images.get(0);
+		for(Photo pic : this.images) {
+			if(pic.getCalendar().compareTo(temp.getCalendar()) > 0) temp = pic;
+		}
+		
+		return temp.getCalendar();
+	}
+	
+	/**Gets the date range of all pics in the album.
+	 * @return	the Album's date range
+	 */
+	public String getDateRange() {
+		if(this.getAlbumSize() == 0) return "";
+		return getOldestCalendar().getTime().toString() +" - " +getNewestCalendar().getTime().toString();
 	}
 	
 	/**Sets the album title
@@ -61,15 +99,15 @@ public class Album implements Serializable {
 		this.title = title;
 	}
 	
-	/**Adds an image to the Album
+	/**Adds a photo to the Album
 	 * @param image		the image being added to the album
 	 */
-	public void addImage(Pic image) {
+	public void addPhoto(Photo image) {
 		if(image == null) return;
 		this.images.add(image);
 	}
 	
-	public boolean removeImage(int index) {
+	public boolean removePhoto(int index) {
 		try {
 			this.images.remove(index);
 			return true;
@@ -78,7 +116,7 @@ public class Album implements Serializable {
 		}
 	}
 	
-	public Pic getImage(int index) {
+	public Photo getPhoto(int index) {
 		try {
 			return this.images.get(index);
 		} catch(NullPointerException | ArrayIndexOutOfBoundsException e) {
@@ -86,7 +124,7 @@ public class Album implements Serializable {
 		}
 	}
 	
-	public Pic getFirstImage() {
+	public Photo getFirstPhoto() {
 		try {
 			return this.images.get(0);
 		} catch(NullPointerException e) {

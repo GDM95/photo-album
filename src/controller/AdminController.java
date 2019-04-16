@@ -2,6 +2,7 @@ package controller;
 
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -20,6 +21,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
+import model.Album;
 import model.User;
 import model.UserList;
 
@@ -131,6 +133,10 @@ public class AdminController {
 			}
 		}
 		
+	}
+	
+	private void sortList() {
+		items.sort(Comparator.comparing(User::getUsername));
 	}
 	
 

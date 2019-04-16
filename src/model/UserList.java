@@ -26,15 +26,27 @@ public class UserList {
 	 */
 	private static ArrayList<User> users;
 	
-	private static User current_user;
+	private static String current_username;
+	
+	private static String current_album;
 	
 	
 	public static User getCurrentUser() {
-		return UserList.current_user;
+		User temp = UserList.getUser(current_username);
+		return temp;
 	}
 	
 	public static void setCurrentUser(User user) {
-		UserList.current_user = user;
+		UserList.current_username = user.getUsername();
+	}
+	
+	public static Album getCurrentAlbum() {
+		Album temp = getCurrentUser().getAlbum(current_album);
+		return temp;
+	}
+	
+	public static void setCurrentAlbum(Album album) {
+		UserList.current_album = album.getAlbumTitle();
 	}
 	
 	public static List<User> getUserList() {
@@ -60,7 +72,7 @@ public class UserList {
 	public static boolean usernameExists(String name) {
 		if(UserList.users == null || users.isEmpty()) return false;
 		for(User user : UserList.users) {
-			if(user.getUsername().equalsIgnoreCase(name)) return true;
+			if(user.getUsername().equals(name)) return true;
 		}
 		return false;
 	}
