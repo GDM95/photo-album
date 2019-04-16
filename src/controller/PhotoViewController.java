@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,8 +17,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -32,28 +37,56 @@ public class PhotoViewController {
 	@FXML TextField date;
 	@FXML TextField tags;
 	
-	@FXML GridPane photogrid;
+	@FXML ListView<Photo> photoListView;
 	
 	@FXML ImageView display;
+	
+	private ObservableList<Photo> obsList;
 	
 	@FXML
 	public void initialize() {
 		UserList.deserializeUsers();
 		
+		obsList = FXCollections.observableArrayList(UserList.getCurrentAlbum().getPhotoList());
+		photoListView.setItems(obsList);
+		
+		photoListView.setCellFactory(param -> new ListCell<Photo>() {
+			private ImageView imgView = new ImageView();
+            @Override
+            protected void updateItem(Photo item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                	imgView.setImage(item.getImage());
+                	imgView.setFitHeight(60);
+        			imgView.setFitWidth(60);
+        			imgView.setPreserveRatio(true);
+                    setText(null);
+                    setGraphic(imgView);
+                }
+            }
+        });
+		
 		caption.setEditable(false);
 		date.setEditable(false);
 		tags.setEditable(false);
 		
-		for(int i = 0; i < UserList.getCurrentAlbum().getAlbumSize(); i++) {
-			ImageView imageView = new ImageView(UserList.getCurrentAlbum().getPhoto(i).getImage());
-			imageView.setPreserveRatio(true);
-			imageView.setFitHeight(122.0);
-			imageView.setFitWidth(88.0);
-			photogrid.add(imageView, i % 2, i / 2);
-		}
-		
+		photoListView.getSelectionModel().selectedItemProperty().addListener( (obs, oldVal, newVal) -> showPhotoDetails() );
 	}
 	
+	private void showPhotoDetails() {
+		Photo photo = photoListView.getSelectionModel().getSelectedItem();
+		if(photo == null) return;
+		display.setImage(photo.getImage());
+		caption.setText(photo.getCaption());
+		date.setText(photo.getDate());
+		tags.setText(photo.getTagList().toString());
+	}
+	
+
 	@FXML
 	private void goBack(ActionEvent e) {
 		UserList.serializeUsers();
@@ -106,10 +139,10 @@ public class PhotoViewController {
 		for(Album album : UserList.getCurrentUser().getAlbumList()) {
 			for(Photo photo : album.getPhotoList()) {
 				if(pData.equals(photo.getPhotoData())) {
+					obsList.add(photo);
 					UserList.getCurrentAlbum().addPhoto(photo);
-					UserList.serializeUsers();
-					ImageView imgView = new ImageView(photo.getImage());
-					photogrid.getChildren().add(imgView);
+					UserList.serializeUsers();	
+					photoListView.getSelectionModel().select(photo);
 					return;
 				}
 			}
@@ -117,13 +150,27 @@ public class PhotoViewController {
 		
 		//add new photo
 		Photo temp = new Photo(pData.getImageFromPixels());
+		obsList.add(temp);
 		UserList.getCurrentAlbum().addPhoto(temp);
+		photoListView.getSelectionModel().select(temp);
 		UserList.serializeUsers();
 	}
 	
 	@FXML
 	private void deletePhoto() {
-		
+		Photo temp = photoListView.getSelectionModel().getSelectedItem();
+		if(temp == null) return;
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Delete this photo?", ButtonType.YES, ButtonType.NO);
+		alert.showAndWait();
+
+		if (alert.getResult() == ButtonType.YES) {
+			obsList.remove(temp);
+			UserList.getCurrentAlbum().removePhoto(temp);
+			UserList.serializeUsers();
+		}
+		if(obsList.size() == 0) {
+			
+		}
 	}
 	
 	@FXML
@@ -148,12 +195,22 @@ public class PhotoViewController {
 	
 	@FXML
 	private void previousPhoto() {
-		
+		int currentIndex = photoListView.getSelectionModel().getSelectedIndex();
+		if(currentIndex == 0) {
+			photoListView.getSelectionModel().clearAndSelect(obsList.size() - 1);
+		} else {
+			photoListView.getSelectionModel().clearAndSelect(currentIndex - 1);
+		}
 	}
 	
 	@FXML
 	private void nextPhoto() {
-		
+		int currentIndex = photoListView.getSelectionModel().getSelectedIndex();
+		if(currentIndex == obsList.size() - 1) {
+			photoListView.getSelectionModel().clearAndSelect(0);
+		} else {
+			photoListView.getSelectionModel().clearAndSelect(currentIndex + 1);
+		}
 	}
 	
 	public void start(Stage primaryStage) {

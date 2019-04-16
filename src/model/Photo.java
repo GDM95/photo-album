@@ -148,4 +148,11 @@ public class Photo implements Serializable {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof Photo)) return false;
+		Photo photo = (Photo) obj;
+		return this.getPhotoData().equals(photo.getPhotoData());
+	}
 }

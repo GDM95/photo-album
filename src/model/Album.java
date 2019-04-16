@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javafx.scene.image.Image;
+
 /**The Album class that keeps a list of images.
  * @author Eric S Kim
  * @author Greg Melillo
@@ -116,6 +118,12 @@ public class Album implements Serializable {
 		}
 	}
 	
+	public boolean removePhoto(Photo photo) {
+		if(!photoExists(photo)) return false;
+		this.images.remove(photo);
+		return true;
+	}
+	
 	public Photo getPhoto(int index) {
 		try {
 			return this.images.get(index);
@@ -130,5 +138,13 @@ public class Album implements Serializable {
 		} catch(NullPointerException e) {
 			return null;
 		}
+	}
+	
+	public boolean photoExists(Photo photo) {
+		if(this.images == null || this.images.isEmpty()) return false;
+		for(Photo temp : this.images) {
+			if(temp.equals(photo)) return true;
+		}
+		return false;
 	}
 }

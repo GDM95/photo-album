@@ -103,12 +103,13 @@ public class AlbumViewController {
 	private void deleteAlbum() {
 		Album temp = albumsView.getSelectionModel().getSelectedItem();
 		if(temp == null) return;
-		Alert alert = new Alert(AlertType.CONFIRMATION, "Delete " + temp.getAlbumTitle() + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		Alert alert = new Alert(AlertType.CONFIRMATION, "Delete " + temp.getAlbumTitle() + "?", ButtonType.YES, ButtonType.NO);
 		alert.showAndWait();
 
 		if (alert.getResult() == ButtonType.YES) {
 			obsList.remove(temp);
 			UserList.getCurrentUser().removeAlbum(temp);
+			UserList.serializeUsers();
 		}
 		if(obsList.size() == 0) {
 			albumName.clear();

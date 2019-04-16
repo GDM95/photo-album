@@ -60,7 +60,7 @@ public class Tag implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Type: " +type +", Name: " +name;
+		return type +": " +name;
 	}
 	
 	/* (non-Javadoc)
