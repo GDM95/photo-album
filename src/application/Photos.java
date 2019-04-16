@@ -15,6 +15,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.UserList;
 
+/**Main application class
+ * @author Eric S Kim
+ * @author Greg Melillo
+ *
+ */
 public class Photos extends Application {
 	@Override
 	public void start(Stage primaryStage) 
@@ -37,6 +42,9 @@ public class Photos extends Application {
 	
 
 
+	/**Main method
+	 * @param args	the args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
