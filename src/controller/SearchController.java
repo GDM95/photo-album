@@ -187,6 +187,8 @@ public class SearchController {
 	    combo_logic.setVisible(false);
 		textfield_tag1.setVisible(false);
 		textfield_tag2.setVisible(false);
+		button_1tagConfirm.setVisible(false);
+		button_2tagConfirm.setVisible(false);
 		
 		button_dateConfirm.setVisible(true);
 		datePicker_from.setVisible(true);
@@ -219,7 +221,7 @@ public class SearchController {
 		
 	}
 	
-	
+	@FXML
 	/**
 	 * handles clicking of the confirm button for the back button, returns to album view
 	 */
@@ -236,6 +238,7 @@ public class SearchController {
 		}
 	}
 	
+	@FXML
 	/**
 	 * listener for the pair of tag search confirm buttons, calls their corresponding methods in turn
 	 */

@@ -82,6 +82,8 @@ public class PhotoViewController {
 	@FXML
 	public void initialize() {
 		UserList.deserializeUsers();
+		
+		System.out.println("Distinct tag types: " + Tag.getDistinctTypesList());
 
 		obsList = FXCollections.observableArrayList(UserList.getCurrentAlbum().getPhotoList());
 		photoListView.setItems(obsList);

@@ -104,6 +104,7 @@ public class Photo implements Serializable {
 	 */
 	public boolean addTag(String type, String name) {
 		if(tagExists(type,name)) return false;
+		System.out.println("Added tag: " + type + ", " + name + " inside Photos");
 		tags.add(new Tag(type,name));
 		return true;
 	}
