@@ -144,6 +144,11 @@ public class UserList {
 		}catch(IOException | ClassNotFoundException e) {
 			
 		}finally {
+			if(UserList.users == null) {
+				UserList.users = new ArrayList<User>();
+				UserList.addNewUser("admin");
+				UserList.addNewUser("stock");
+			}
 		}
 	}
 	
