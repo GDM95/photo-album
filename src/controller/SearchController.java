@@ -1,8 +1,12 @@
 package controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,12 +16,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.Album;
@@ -36,6 +43,9 @@ public class SearchController {
 	@FXML Button button_back;
 	@FXML Button button_1tagConfirm;
 	@FXML Button button_2tagConfirm;
+	@FXML Button button_newAlbum;
+
+	
 
 	
 	@FXML ComboBox<String> combo_numTags;
@@ -186,6 +196,8 @@ public class SearchController {
 	 * sets widgets for a Tag search
 	 */
 	public void displayTagSearch() {
+		obsSearchResultsList.clear();
+
 		button_dateConfirm.setVisible(false);
 		datePicker_from.setVisible(false);
 		datePicker_to.setVisible(false);
@@ -196,6 +208,8 @@ public class SearchController {
 	 * sets widgets for a 1 or 2 tag search
 	 */
 	public void displayTagSearch(int i) {
+		obsSearchResultsList.clear();
+
 		if(i == 1) {
 			combo_tag1.setVisible(true);
 			combo_tag2.setVisible(false);
@@ -221,6 +235,7 @@ public class SearchController {
 	 * sets widgets for a Date search
 	 */
 	public void displayDateSearch() {
+		obsSearchResultsList.clear();
 		combo_numTags.setVisible(false);
 		combo_tag1.setVisible(false);
 		combo_tag2.setVisible(false);
@@ -234,6 +249,51 @@ public class SearchController {
 		datePicker_from.setVisible(true);
 		datePicker_to.setVisible(true);
 	}
+	
+	/**
+	 * handles clicking of confirm button for Date search
+	 */
+	public void searchByDate() {
+		obsSearchResultsList.clear();
+		
+		LocalDate fromValue = datePicker_from.getValue();
+		LocalDate toValue = datePicker_to.getValue();
+		
+		if(fromValue == null || toValue == null) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Search Failed");
+			alert.setHeaderText(null);
+			alert.setContentText("You have empty fields!");
+			alert.showAndWait();
+			return;
+		}
+		
+		
+		if(toValue.isBefore(fromValue)) {
+			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Date Search Failed");
+			alert.setHeaderText(null);
+			alert.setContentText("From-date must be before to-date");
+			alert.showAndWait();
+			datePicker_from.getEditor().clear();
+			datePicker_to.getEditor().clear();
+			return;
+		}
+		
+		LocalDateTime t;
+		LocalDate d;
+		for(Album a: UserList.getCurrentUser().getAlbumList()) {
+			for(Photo p: a.getPhotoList()) {
+				 t = LocalDateTime.ofInstant(p.getCalendar().toInstant(), ZoneId.systemDefault());
+				 d = t.toLocalDate();
+				 if(d.isEqual(fromValue) || d.isAfter(fromValue) && (d.isEqual(toValue) || d.isBefore(toValue) )) {
+					 obsSearchResultsList.add(p);
+				 }
+			}
+		}
+	}
+
 	
 
 	/**
@@ -258,6 +318,13 @@ public class SearchController {
 					}
 				}
 			}
+		}else {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Search Failed");
+			alert.setHeaderText(null);
+			alert.setContentText("You have empty fields!");
+			alert.showAndWait();
+			return;
 		}
 	}
 	
@@ -303,6 +370,13 @@ public class SearchController {
 					}
 				}
 			}
+		}else {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Search Failed");
+			alert.setHeaderText(null);
+			alert.setContentText("You have empty fields!");
+			alert.showAndWait();
+			return;
 		}
 		
 	}
@@ -337,6 +411,53 @@ public class SearchController {
 			searchBy2Tag();
 		}
 		
+	}
+	
+	@FXML
+	public void handleNewAlbumButtonClick(ActionEvent e) {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Add Album from Selection");
+		dialog.setHeaderText("Please enter the new album's name.");
+		dialog.setContentText("Album name:");
+	
+		try {
+			Optional<String> result = dialog.showAndWait();
+			if(result.isPresent()) {
+				Album temp = new Album(result.get());
+				if(!obsSearchResultsList.isEmpty()) {
+					for(Photo p : obsSearchResultsList) {
+						temp.addPhoto(p);
+					}
+				}else {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Create Album Failed");
+					alert.setHeaderText(null);
+					alert.setContentText("Album cannot be empty!");
+					alert.showAndWait();
+					return;
+				}
+				if(temp == null || UserList.getCurrentUser().albumTitleExists(temp.getAlbumTitle())) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Create Album Failed");
+					alert.setHeaderText(null);
+					alert.setContentText("An album with that title already exists!");
+					alert.showAndWait();
+					return;
+				}
+				
+				UserList.getCurrentUser().addNewAlbum(temp);
+				UserList.serializeUsers();
+				
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Album Created");
+				alert.setHeaderText(null);
+				alert.setContentText("Album successfully created!");
+				alert.showAndWait();
+				return;
+			}
+		} catch(NullPointerException n) {
+			//probably a TERRIBLE idea but let's just pretend this doesn't happen for now
+		}
 	}
 	
 		
