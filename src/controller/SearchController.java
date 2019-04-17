@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -14,7 +15,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import model.Album;
 import model.Photo;
@@ -40,6 +44,7 @@ public class SearchController {
 	@FXML ComboBox<String> combo_logic;
 	@FXML TextField textfield_tag1;
 	@FXML TextField textfield_tag2;
+	@FXML ListView<Photo> photoListView;
 
 
 
@@ -47,17 +52,24 @@ public class SearchController {
 	private ObservableList<String> logicOptions;
 	private ObservableList<String> numTagsOptions;
 	private ObservableList<String> tagOptions;
+	private ObservableList<Photo> obsSearchResultsList;
+	
+	
+	/**
+	 * hold the search results Photo array
+	 */
+	private List<Photo> searchResultsList = new ArrayList<Photo>();
+	
 
 
 	//private ObservableList<String> tag1Options;
 	//private ObservableList<String> tag2Options;
 
 
-
 	public void initialize() {
 		// populate user list
 		UserList.deserializeUsers();
-		
+	
 		
 		// set the original view
 		combo_numTags.setVisible(false);
@@ -68,10 +80,35 @@ public class SearchController {
 		textfield_tag2.setVisible(false);
 		button_1tagConfirm.setVisible(false);
 		button_2tagConfirm.setVisible(false);
-
-
 		
 		
+		
+		// set up the listview of images
+		obsSearchResultsList = FXCollections.observableArrayList(searchResultsList);
+		photoListView.setItems(obsSearchResultsList);
+		
+		photoListView.setCellFactory(param -> new ListCell<Photo>() {
+			private ImageView imgView = new ImageView();
+            @Override
+            protected void updateItem(Photo item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                	imgView.setImage(item.getImage());
+                	imgView.setFitHeight(60);
+        			imgView.setFitWidth(60);
+        			imgView.setPreserveRatio(true);
+                    setText(null);
+                    setGraphic(imgView);
+                }
+            }
+        });
+		
+
+
 		// Set the search type combo box options
 		searchOptions = 
 			    FXCollections.observableArrayList(
@@ -124,7 +161,8 @@ public class SearchController {
 		
 		// Set the num tags combo box options
 		tagOptions = 
-			FXCollections.observableArrayList(Tag.getDistinctTypesList());
+			FXCollections.observableArrayList(UserList.getCurrentUser().getUniqueTagTypes());
+		
 						
 		// listen for changes in the combo box
 		combo_tag1.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
@@ -135,6 +173,7 @@ public class SearchController {
 		combo_tag2.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
 		
 		});
+		
 								
 		searchType.setItems(searchOptions);
 		combo_logic.setItems(logicOptions);
@@ -200,16 +239,20 @@ public class SearchController {
 	 * handles clicking of the confirm button for a 1 tag search
 	 */
 	public void searchBy1Tag() {
-		for(String s: Tag.getDistinctTypesList()) {
-			System.out.println(s);
-		}
+
+		obsSearchResultsList.clear();
 		
-		// iterate through all albums for this user
-		List<Album> album_list = UserList.getCurrentUser().getAlbumList();
-		for(Album a : album_list) {
-			List<Photo> photo_list = a.getPhotoList();
-			for(Photo p : photo_list) {
-				
+		String type = combo_tag1.getValue();
+		String name = textfield_tag1.getText();
+
+		
+		for(Album a: UserList.getCurrentUser().getAlbumList()) {
+			for(Photo p: a.getPhotoList()) {
+				for(Tag t: p.getTagList()) {
+					if(t.getType().equals(type) && t.getName().equals(name) && !obsSearchResultsList.contains(p)) {
+						obsSearchResultsList.add(p);
+					}
+				}
 			}
 		}
 	}
@@ -218,6 +261,45 @@ public class SearchController {
 	 * handles clicking of the confirm button for a 2 tag search
 	 */
 	public void searchBy2Tag() {
+		if(!(combo_logic.getValue() == null)
+				&& !(combo_tag1.getValue() == null)
+				&& !(combo_tag2.getValue() == null)
+				&& !(combo_tag1.getValue() == null)
+				&& !(textfield_tag1.getText() == null)
+				&& !(textfield_tag2.getText() == null)){
+
+			obsSearchResultsList.clear();
+			String type1 = combo_tag1.getValue();
+			String name1 = textfield_tag1.getText();
+			
+			String type2 = combo_tag2.getValue();
+			String name2 = textfield_tag2.getText();
+
+			for(Album a: UserList.getCurrentUser().getAlbumList()) {
+				for(Photo p: a.getPhotoList()) {
+					boolean firstTagExists = false;
+					boolean secondTagExists = false;
+					for(Tag t: p.getTagList()) {
+						if(t.getType().equals(type1) && t.getName().equals(name1)) {
+							firstTagExists = true;
+						}
+						if(t.getType().equals(type2) && t.getName().equals(name2)) {
+							secondTagExists = true;
+						}
+					}
+
+					if(combo_logic.getValue().equals("AND")) {
+						if((firstTagExists && secondTagExists) && !obsSearchResultsList.contains(p)) {
+							obsSearchResultsList.add(p);
+						}
+					}else if(combo_logic.getValue().equals("OR")) {
+						if((firstTagExists || secondTagExists) && !obsSearchResultsList.contains(p)) {
+							obsSearchResultsList.add(p);
+						}
+					}
+				}
+			}
+		}
 		
 	}
 	

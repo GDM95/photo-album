@@ -104,13 +104,13 @@ public class Photo implements Serializable {
 	 */
 	public boolean addTag(String type, String name) {
 		if(tagExists(type,name)) return false;
-		System.out.println("Added tag: " + type + ", " + name + " inside Photos");
 		tags.add(new Tag(type,name));
 		return true;
 	}
 	
-	/**Removes a given Tag object from the Tag list
-	 * @param tag		the tag to be removed
+	/**Removes a Tag from the list with the matching type and name
+	 * @param type		the type of the tag
+	 * @param name		the name of the tag
 	 * @return boolean value determining whether the tag was successfully removed
 	 */
 	public boolean removeTag(String type, String name) {

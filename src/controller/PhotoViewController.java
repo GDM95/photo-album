@@ -10,14 +10,12 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,7 +30,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -60,7 +57,7 @@ public class PhotoViewController {
 	 * Photo tags text field
 	 */
 	@FXML TextField tags;
-
+	
 	/**
 	 * Photo ListView
 	 */
@@ -83,11 +80,8 @@ public class PhotoViewController {
 	public void initialize() {
 		UserList.deserializeUsers();
 		
-		System.out.println("Distinct tag types: " + Tag.getDistinctTypesList());
-
 		obsList = FXCollections.observableArrayList(UserList.getCurrentAlbum().getPhotoList());
 		photoListView.setItems(obsList);
-		photoListView.getSelectionModel().select(0);
 		
 		photoListView.setCellFactory(param -> new ListCell<Photo>() {
 			private ImageView imgView = new ImageView();
@@ -112,6 +106,10 @@ public class PhotoViewController {
 		caption.setEditable(false);
 		date.setEditable(false);
 		tags.setEditable(false);
+		
+
+		// select the first item
+        photoListView.getSelectionModel().select(0);
 		photoListView.getSelectionModel().selectedItemProperty().addListener( (obs, oldVal, newVal) -> showPhotoDetails() );
 	}
 	
@@ -366,7 +364,7 @@ public class PhotoViewController {
 				return;
 			}
 			temp.sortTags();
-			UserList.serializeUsers();
+			//UserList.serializeUsers();
 			showPhotoDetails();
 		}
 	}
@@ -401,6 +399,31 @@ public class PhotoViewController {
 			temp.removeTag(tagInfo[0], tagInfo[1].substring(1));
 			UserList.serializeUsers();
 			showPhotoDetails();
+		}
+	}
+	
+	/**
+	 * Add a caption to the selected photo. Overwrites the current caption.
+	 */
+	@FXML
+	private void addCaption() {
+		Photo temp = photoListView.getSelectionModel().getSelectedItem();
+		if(temp == null) return;
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setTitle("Add Caption");
+		dialog.setHeaderText("Please enter the desired caption for your photo.");
+		dialog.setContentText("Caption:");
+
+		try {
+			Optional<String> result = dialog.showAndWait();
+			if(result.isPresent()) {
+				String s = result.get();
+				temp.setCaption(s);
+				UserList.serializeUsers();
+				showPhotoDetails();
+			}
+		} catch(NullPointerException e) {
+			//probably a TERRIBLE idea but let's just pretend this doesn't happen for now
 		}
 	}
 	

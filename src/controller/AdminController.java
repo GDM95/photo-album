@@ -21,7 +21,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
-import model.Album;
 import model.User;
 import model.UserList;
 

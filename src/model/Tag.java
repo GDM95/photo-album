@@ -20,11 +20,7 @@ public class Tag implements Serializable {
 	 */
 	private String type, name;
 	
-	/**
-	 * contains all of the distinct tag types entered in the system
-	 */
-	private static List<String> distinctTypes = new ArrayList<String>();
-	
+
 	/**Constructs a tag with a specified type and name associated with the type
 	 * @param type		the type of tag
 	 * @param name		a name of the specified tag type
@@ -33,9 +29,9 @@ public class Tag implements Serializable {
 		this.type = type;
 		this.name = name;
 		
-		// if the entered tag type is new, add it to the unique tag type list
-		if(!distinctTypes.contains(type)) {
-			distinctTypes.add(type);
+		List<String> uniqueTagList = UserList.getCurrentUser().getUniqueTagTypes();
+		if(!uniqueTagList.contains(type)) {
+			uniqueTagList.add(type);
 		}
 	}
 	
@@ -46,12 +42,6 @@ public class Tag implements Serializable {
 		return this.type;
 	}
 	
-	/**Gets the list of distinct types
-	 * @return Tag's type
-	 */
-	public static List<String> getDistinctTypesList() {
-		return distinctTypes;
-	}
 	
 	/**Gets Tag's name
 	 * @return Tag's name

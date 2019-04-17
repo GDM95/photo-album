@@ -115,7 +115,7 @@ public class UserList {
 	
 	/**
 	 * Searches the username list for the given name
-	 * @param key the username to be looked up
+	 * @param name the username to be looked up
 	 * @return the user if one is found
 	 */
 	public static User getUser(String name) { 

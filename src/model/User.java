@@ -20,10 +20,19 @@ public class User implements Serializable {
 	 * User's username
 	 */
 	private String username;
+	
+	
+	/**
+	 * stores a list of unique tags that this user has entered
+	 */
+	private List<String> uniqueTagTypes;
+	
+	
 	/**
 	 * User's list of albums
 	 */
 	private List<Album> albums;
+	
 
 	/**Constructs a User with a specified username
 	 * @param username		the username
@@ -31,6 +40,7 @@ public class User implements Serializable {
 	public User(String username) {
 		this.username = username;
 		this.albums = new ArrayList<Album>();
+		this.uniqueTagTypes = new ArrayList<String>();
 	}
 	
 	/**Gets the User's album list
@@ -81,7 +91,7 @@ public class User implements Serializable {
 	
 	/**Adds a new album to the User's album list. Does not add albums with duplicate titles
 	 * @param album		the album to be added
-	 * @param boolean value confirming whether the album was successfully added
+	 * @return boolean value confirming whether the album was successfully added
 	 */
 	public boolean addNewAlbum(Album album) {
 		if(albumTitleExists(album.getAlbumTitle())) return false;
@@ -124,5 +134,9 @@ public class User implements Serializable {
 			if(album.getAlbumTitle().equals(title)) return true;
 		}
 		return false;
+	}
+	
+	public List<String> getUniqueTagTypes(){
+		return uniqueTagTypes;
 	}
 }
