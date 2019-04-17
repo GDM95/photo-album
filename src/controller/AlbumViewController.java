@@ -175,6 +175,16 @@ public class AlbumViewController {
 	@FXML
 	private void deleteAlbum() {
 		Album temp = albumsView.getSelectionModel().getSelectedItem();
+		
+		if(temp.getAlbumTitle().equals("stock") && UserList.getCurrentUser().getUsername().equals("stock")){
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Delete Album Failed");
+			alert.setHeaderText(null);
+			alert.setContentText("This album cannot be deleted!");
+			alert.showAndWait();
+			return;
+		}
+		
 		if(temp == null) return;
 		Alert alert = new Alert(AlertType.CONFIRMATION, "Delete " + temp.getAlbumTitle() + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 		alert.showAndWait();
