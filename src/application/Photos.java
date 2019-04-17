@@ -55,7 +55,6 @@ public class Photos extends Application {
 	 */
 	@Override
 	public void stop(){
-	    System.out.println("Stage is closing");
 	    UserList.serializeUsers();
 	}
 
