@@ -144,8 +144,6 @@ public class UserList {
 		}catch(IOException | ClassNotFoundException e) {
 			
 		}finally {
-			System.out.println("Deserializing Users...");
-			System.out.println(Arrays.toString(UserList.users.toArray()));
 		}
 	}
 	

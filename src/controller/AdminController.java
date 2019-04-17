@@ -133,10 +133,19 @@ public class AdminController {
 		if(result.isPresent()) {
 			String s = result.get().trim();
 			if(UserList.getUser(s) == null) {
-				UserList.addNewUser(s);
-				items.add(UserList.getUser(s));
+				if(UserList.addNewUser(s)) {
+					items.add(UserList.getUser(s));
+				}else {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Add User Failed");
+					alert.setHeaderText(null);
+					alert.setContentText("This user already exists!");
+					alert.showAndWait();
+					return;
+				}
 			}
 		}
+		UserList.serializeUsers();
 	}
 	
 	/**
@@ -145,7 +154,7 @@ public class AdminController {
 	public void deleteUser() {
 		User u = listView.getSelectionModel().getSelectedItem();
 		
-		if(!u.getUsername().equals("admin") && !u.getUsername().equals("stock")){
+		if(!u.getUsername().equals("admin") && !u.getUsername().equals("stock")){ 
 			Alert alert = new Alert(AlertType.CONFIRMATION, "Delete " + u.getUsername() + "?", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 			alert.showAndWait();
 
@@ -153,8 +162,15 @@ public class AdminController {
 				items.remove(u);
 				UserList.removeUser(u);
 			}
+		}else {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Delete User Failed");
+			alert.setHeaderText(null);
+			alert.setContentText("You cannot delete this user!");
+			alert.showAndWait();
+			return;
 		}
-		
+		UserList.serializeUsers();
 	}
 	
 	private void sortList() {

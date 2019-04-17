@@ -109,7 +109,8 @@ public class PhotoViewController {
 		
 
 		// select the first item
-        photoListView.getSelectionModel().select(0);
+        photoListView.getSelectionModel().clearAndSelect(0);
+        showPhotoDetails();
 		photoListView.getSelectionModel().selectedItemProperty().addListener( (obs, oldVal, newVal) -> showPhotoDetails() );
 	}
 	

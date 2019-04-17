@@ -1,11 +1,16 @@
 package controller;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +24,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.*;
 
@@ -54,11 +60,40 @@ public class AlbumViewController {
 	private ObservableList<Album> obsList;
 	
 	/**
-	 * Initializes the controller
+	 * Initializes the controller, also sets the stock album upon opening the scene if it doesn't exist
 	 */
 	@FXML
 	public void initialize() {
 		UserList.deserializeUsers();
+		
+		
+		if(UserList.getCurrentUser().getUsername().equals("stock")) {
+			Album a = new Album("stock");
+			
+			
+			File folder = new File("stock/");
+			File[] listOfFiles = folder.listFiles();
+
+			for (File file : listOfFiles) {
+			    if (file.isFile()) {
+			    	try {
+				    	BufferedImage buffImage = ImageIO.read(file);
+						Image newImage = SwingFXUtils.toFXImage(buffImage, null);
+						
+						PhotoData pData = new PhotoData();
+						pData.setPixelsFromImage(newImage);
+						
+						Photo temp = new Photo(pData.getImageFromPixels());
+						a.addPhoto(temp);
+			    	}catch(IOException e) {
+						
+					}
+			    }
+			}
+			UserList.getCurrentUser().addNewAlbum(a);
+		}
+		
+		
 		
 		obsList = FXCollections.observableArrayList(UserList.getCurrentUser().getAlbumList());
 		albumsView.setItems(obsList);
