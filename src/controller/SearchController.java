@@ -204,6 +204,7 @@ public class SearchController {
 			textfield_tag2.setVisible(false);
 			button_1tagConfirm.setVisible(true);
 			button_2tagConfirm.setVisible(false);
+
 			
 		}else {
 			combo_tag1.setVisible(true);
@@ -239,18 +240,21 @@ public class SearchController {
 	 * handles clicking of the confirm button for a 1 tag search
 	 */
 	public void searchBy1Tag() {
+		if(!(combo_tag1.getValue() == null)
+				&& !(textfield_tag1.getText() == null) ) {
+			
+			obsSearchResultsList.clear();
+			
+			String type = combo_tag1.getValue();
+			String name = textfield_tag1.getText();
 
-		obsSearchResultsList.clear();
-		
-		String type = combo_tag1.getValue();
-		String name = textfield_tag1.getText();
-
-		
-		for(Album a: UserList.getCurrentUser().getAlbumList()) {
-			for(Photo p: a.getPhotoList()) {
-				for(Tag t: p.getTagList()) {
-					if(t.getType().equals(type) && t.getName().equals(name) && !obsSearchResultsList.contains(p)) {
-						obsSearchResultsList.add(p);
+			
+			for(Album a: UserList.getCurrentUser().getAlbumList()) {
+				for(Photo p: a.getPhotoList()) {
+					for(Tag t: p.getTagList()) {
+						if(t.getType().equals(type) && t.getName().equals(name) && !obsSearchResultsList.contains(p)) {
+							obsSearchResultsList.add(p);
+						}
 					}
 				}
 			}
