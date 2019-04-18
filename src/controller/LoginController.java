@@ -13,10 +13,9 @@ import javafx.stage.Stage;
 import model.*;
 
 /**
- * 
+ * Handles the login screen
  * @author Greg Melillo
  * @author Eric S Kim
- * Handles the login screen
  */
 public class LoginController {
 	/**

@@ -32,6 +32,12 @@ import model.Photo;
 import model.UserList;
 import model.Tag;
 
+
+/**
+ * Handles the search screen
+ * @author Greg Melillo
+ * @author Eric S Kim
+ */
 public class SearchController {
 	
 	@FXML ComboBox<String> searchType;
@@ -69,13 +75,8 @@ public class SearchController {
 	 * hold the search results Photo array
 	 */
 	private List<Photo> searchResultsList = new ArrayList<Photo>();
+
 	
-
-
-	//private ObservableList<String> tag1Options;
-	//private ObservableList<String> tag2Options;
-
-
 	public void initialize() {
 		// populate user list
 		UserList.deserializeUsers();
@@ -206,6 +207,7 @@ public class SearchController {
 	
 	/**
 	 * sets widgets for a 1 or 2 tag search
+	 * @param i an int that represents a 1 or 2 tag search
 	 */
 	public void displayTagSearch(int i) {
 		obsSearchResultsList.clear();
@@ -414,6 +416,9 @@ public class SearchController {
 	}
 	
 	@FXML
+	/**
+	 * listener for the "New Album" button
+	 */
 	public void handleNewAlbumButtonClick(ActionEvent e) {
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setTitle("Add Album from Selection");
